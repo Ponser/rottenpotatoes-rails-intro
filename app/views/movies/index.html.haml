@@ -1,6 +1,15 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
+-# HW 2 Part 2 - Put 'rating' checkboxes on the form
+-# add ":id => 'ratings_form'" to form_tag per HW 2 Part 2 instructions
+= form_tag movies_path, {:id => 'ratings_form', :method => :get} do
+  Include:
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[#{rating}]"
+  = submit_tag 'Refresh', :id => 'ratings_submit' # :id added per instructions
+
 %table#movies
   %thead
     %tr
@@ -18,4 +27,5 @@
 
 = link_to 'Add new movie', new_movie_path
 =debug(params)
+=debug(@all_ratings)
 
