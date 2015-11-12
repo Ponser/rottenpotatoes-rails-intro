@@ -25,16 +25,22 @@ class MoviesController < ApplicationController
     # https://github.com/saasbook/hw-rails-intro#part-2-filter-the-list-of-movies-by-rating-15-points
     #
     @all_ratings = Movie.all_ratings
-    @checked ||= params[:ratings] || @all_ratings
-    if params[:ratings]
-      params[:note] = 'At least one rating was checked'
-      #@movies = Movie.all.order(order).select {|x| @checked.include? x.rating}
-      @movies = @movies.select {|x| @checked.include? x.rating}
+    params[:note] = nil
+    new_ratings = params[:ratings] # Only when the user clicks 'Refresh'
+    if new_ratings
+      @checked = new_ratings.keys
+      session['checked'] = @checked
+      params[:note] = 'new ratings'
+    else
+      @checked = session['checked'] || @all_ratings
     end
     
+    # subset the list of movies based on the ratings checkboxes
+    @movies = @movies.select {|x| @checked.include? x.rating}
+
     remember_state
     
-    # if the params do NOT have a key and the session DOES, then redirect
+    # if the params do NOT have a key and the session DOES, or there are new ratings, then redirect
     if !params['sort'] && session['sort']
       redirect_to(movies_path + @state)
       return
