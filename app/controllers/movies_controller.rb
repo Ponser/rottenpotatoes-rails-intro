@@ -36,7 +36,7 @@ class MoviesController < ApplicationController
     
     # if the params do NOT have a key and the session DOES, then redirect
     if !params['sort'] && session['sort']
-      redirect_to (movies_path + @state)
+      redirect_to(movies_path + @state)
       return
     end
   end
