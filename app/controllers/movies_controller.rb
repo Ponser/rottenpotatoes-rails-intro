@@ -31,6 +31,14 @@ class MoviesController < ApplicationController
       #@movies = Movie.all.order(order).select {|x| @checked.include? x.rating}
       @movies = @movies.select {|x| @checked.include? x.rating}
     end
+    
+    remember_state
+    
+    # if the params do NOT have a key and the session DOES, then redirect
+    if !params['sort'] && session['sort']
+      redirect_to (movies_path + @state)
+      return
+    end
   end
 
   def new
@@ -59,6 +67,22 @@ class MoviesController < ApplicationController
     @movie.destroy
     flash[:notice] = "Movie '#{@movie.title}' deleted."
     redirect_to movies_path
+  end
+  
+  def remember_state
+    chex = session['checked']
+    sort = session['sort'] || params['sort']
+    divider = '?'
+    @state = divider
+    if sort
+      @state << "sort=#{sort}&"
+      divider = '&'
+    end
+    if chex
+      chex.each {|x| @state << "ratings[#{x}]=1&"}
+      divider = '&'
+    end
+    @state.chomp! divider
   end
 
 end
