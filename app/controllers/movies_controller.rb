@@ -11,6 +11,9 @@ class MoviesController < ApplicationController
   end
 
   def index
+    ################################################################################
+    # https://github.com/saasbook/hw-rails-intro#part-1-sort-the-list-of-movies-15-points
+    #
     order = params[:sort] || session[:sort] || 'title' # Get information about which column is the sort key
     @movies = Movie.all.order(order) # Get a list of movies sorted by the given order
     
