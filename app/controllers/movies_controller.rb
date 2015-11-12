@@ -11,8 +11,12 @@ class MoviesController < ApplicationController
   end
 
   def index
-    order = params[:sort] || session[:sort]
-    @movies = Movie.all.order(order)
+    order = params[:sort] || session[:sort] || 'title' # Get information about which column is the sort key
+    @movies = Movie.all.order(order) # Get a list of movies sorted by the given order
+    
+    # Provide a 'hilite' class for the column header of 
+    # whichever column we are sorting on
+    @hilite = Hash.new; @hilite[order] = 'hilite'
   end
 
   def new
