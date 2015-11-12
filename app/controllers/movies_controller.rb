@@ -20,6 +20,17 @@ class MoviesController < ApplicationController
     # Provide a 'hilite' class for the column header of 
     # whichever column we are sorting on
     @hilite = Hash.new; @hilite[order] = 'hilite'
+    
+    ################################################################################
+    # https://github.com/saasbook/hw-rails-intro#part-2-filter-the-list-of-movies-by-rating-15-points
+    #
+    @all_ratings = Movie.all_ratings
+    @checked ||= params[:ratings] || @all_ratings
+    if params[:ratings]
+      params[:note] = 'At least one rating was checked'
+      #@movies = Movie.all.order(order).select {|x| @checked.include? x.rating}
+      @movies = @movies.select {|x| @checked.include? x.rating}
+    end
   end
 
   def new

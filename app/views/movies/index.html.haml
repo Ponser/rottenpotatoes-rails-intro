@@ -7,7 +7,7 @@
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]"
+    = check_box_tag "ratings[#{rating}]", "1", (@checked.include? rating) ? true : false
   = submit_tag 'Refresh', :id => 'ratings_submit' # :id added per instructions
 
 %table#movies
@@ -27,5 +27,5 @@
 
 = link_to 'Add new movie', new_movie_path
 =debug(params)
-=debug(@all_ratings)
+=debug(@checked.to_s)
 
