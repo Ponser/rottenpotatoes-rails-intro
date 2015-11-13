@@ -41,7 +41,9 @@ class MoviesController < ApplicationController
 
     remember_state
     
-    # if the params do NOT have a key and the session DOES, or there are new ratings, then redirect
+    # If the params do NOT have a key and the session DOES, then redirect
+    # I tried also redirecting on a ratings change, but that caused an
+    # endless loop of redirection
     if !params[:sort] && session[:sort]
       redirect_to(movies_path + @state)
       return
@@ -79,7 +81,6 @@ class MoviesController < ApplicationController
   def remember_state
     chex = session['checked'] || params['checked'] || @all_ratings
     sort = @order
-#    flash[:notice] = 'chex ' + chex.to_s + ', sort ' + sort.to_s
     divider = '?'
     @state = divider
     if sort
@@ -91,6 +92,7 @@ class MoviesController < ApplicationController
       divider = '&'
     end
     @state.chomp! divider
+#    flash[:notice] = "@state = " + @state
   end
 
 end
