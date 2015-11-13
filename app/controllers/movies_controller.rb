@@ -15,6 +15,7 @@ class MoviesController < ApplicationController
     # https://github.com/saasbook/hw-rails-intro#part-1-sort-the-list-of-movies-15-points
     #
     @order = params[:sort] || session[:sort] || 'title' # Get information about which column is the sort key
+    session[:sort] = @order
     @movies = Movie.all.order(@order) # Get a list of movies sorted by the given order
     
     # Provide a 'hilite' class for the column header of 
@@ -32,7 +33,7 @@ class MoviesController < ApplicationController
       session['checked'] = @checked
       params[:note] = 'new ratings'
     else
-      @checked = session['checked'] || @all_ratings
+      @checked = session[:checked] || params[:checked] || @all_ratings.keys
     end
     
     # subset the list of movies based on the ratings checkboxes
@@ -41,7 +42,6 @@ class MoviesController < ApplicationController
     remember_state
     
     # if the params do NOT have a key and the session DOES, or there are new ratings, then redirect
- #   if !params['sort'] && session['sort']
     if !params[:sort] && session[:sort]
       redirect_to(movies_path + @state)
       return
