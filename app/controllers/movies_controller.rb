@@ -33,7 +33,7 @@ class MoviesController < ApplicationController
       session['checked'] = @checked
       params[:note] = 'new ratings'
     else
-      @checked = session[:checked] || params[:checked] || @all_ratings.keys
+      @checked = session[:checked] || params[:checked] || @all_ratings
     end
     
     # subset the list of movies based on the ratings checkboxes
