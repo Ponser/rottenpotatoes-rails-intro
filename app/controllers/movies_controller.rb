@@ -14,12 +14,12 @@ class MoviesController < ApplicationController
     ################################################################################
     # https://github.com/saasbook/hw-rails-intro#part-1-sort-the-list-of-movies-15-points
     #
-    order = params[:sort] || session[:sort] || 'title' # Get information about which column is the sort key
-    @movies = Movie.all.order(order) # Get a list of movies sorted by the given order
+    @order = params[:sort] || session[:sort] || 'title' # Get information about which column is the sort key
+    @movies = Movie.all.order(@order) # Get a list of movies sorted by the given order
     
     # Provide a 'hilite' class for the column header of 
     # whichever column we are sorting on
-    @hilite = Hash.new; @hilite[order] = 'hilite'
+    @hilite = Hash.new; @hilite[@order] = 'hilite'
     
     ################################################################################
     # https://github.com/saasbook/hw-rails-intro#part-2-filter-the-list-of-movies-by-rating-15-points
@@ -41,7 +41,8 @@ class MoviesController < ApplicationController
     remember_state
     
     # if the params do NOT have a key and the session DOES, or there are new ratings, then redirect
-    if !params['sort'] && session['sort']
+ #   if !params['sort'] && session['sort']
+    if !params[:sort] && session[:sort]
       redirect_to(movies_path + @state)
       return
     end
@@ -76,8 +77,9 @@ class MoviesController < ApplicationController
   end
   
   def remember_state
-    chex = session['checked']
-    sort = session['sort'] || params['sort']
+    chex = session['checked'] || params['checked']
+    sort = @order
+    flash[:notice] = 'chex ' + chex.to_s + ', sort ' + sort.to_s
     divider = '?'
     @state = divider
     if sort
