@@ -79,7 +79,7 @@ class MoviesController < ApplicationController
   def remember_state
     chex = session['checked'] || params['checked'] || @all_ratings
     sort = @order
-    flash[:notice] = 'chex ' + chex.to_s + ', sort ' + sort.to_s
+#    flash[:notice] = 'chex ' + chex.to_s + ', sort ' + sort.to_s
     divider = '?'
     @state = divider
     if sort
